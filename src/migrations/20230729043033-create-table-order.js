@@ -2,7 +2,7 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('comments_details', {
+        await queryInterface.createTable('orders', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -12,11 +12,17 @@ module.exports = {
             user_id: {
                 type: Sequelize.INTEGER
             },
-            detail_id: {
+            order_date: {
+                type: Sequelize.DATE
+            },
+            total_amount: {
                 type: Sequelize.INTEGER
             },
-            content: {
-                type: Sequelize.STRING(500)
+            shipping_address: {
+                type: Sequelize.STRING
+            },
+            payment_method: {
+                type: Sequelize.STRING
             },
 
             createdAt: {
@@ -29,7 +35,8 @@ module.exports = {
             }
         });
     },
+
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('comments_details');
+        await queryInterface.dropTable('orders');
     }
 };

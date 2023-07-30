@@ -2,7 +2,7 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('users_tests', {
+        await queryInterface.createTable('cart_items', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -12,12 +12,13 @@ module.exports = {
             user_id: {
                 type: Sequelize.INTEGER
             },
-            test_id: {
+            product_id: {
                 type: Sequelize.INTEGER
             },
-            is_correct: {
-                type: Sequelize.BOOLEAN
+            quantity: {
+                type: Sequelize.INTEGER
             },
+
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE
@@ -28,7 +29,8 @@ module.exports = {
             }
         });
     },
+
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('users_tests');
+        await queryInterface.dropTable('cart_items');
     }
 };

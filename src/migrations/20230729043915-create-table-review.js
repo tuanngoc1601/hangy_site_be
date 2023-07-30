@@ -2,18 +2,27 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('comments_answers', {
+        await queryInterface.createTable('reviews', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            comment_detail_id: {
+            user_id: {
                 type: Sequelize.INTEGER
             },
-            content: {
-                type: Sequelize.STRING(500)
+            product_id: {
+                type: Sequelize.INTEGER
+            },
+            rating: {
+                type: Sequelize.INTEGER
+            },
+            comment: {
+                type: Sequelize.TEXT
+            },
+            review_date: {
+                type: Sequelize.DATE
             },
 
             createdAt: {
@@ -26,7 +35,8 @@ module.exports = {
             }
         });
     },
+
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('comments_answers');
+        await queryInterface.dropTable('reviews');
     }
 };

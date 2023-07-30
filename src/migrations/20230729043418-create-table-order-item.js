@@ -2,17 +2,23 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('passed_courses', {
+        await queryInterface.createTable('order_items', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            user_id: {
+            order_id: {
                 type: Sequelize.INTEGER
             },
-            course_id: {
+            product_id: {
+                type: Sequelize.INTEGER
+            },
+            quantity: {
+                type: Sequelize.INTEGER
+            },
+            sub_total: {
                 type: Sequelize.INTEGER
             },
 
@@ -26,7 +32,8 @@ module.exports = {
             }
         });
     },
+
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('passed_courses');
+        await queryInterface.dropTable('order_items');
     }
 };

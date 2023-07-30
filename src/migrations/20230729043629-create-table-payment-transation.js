@@ -2,18 +2,27 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('courses', {
+        await queryInterface.createTable('payment_transations', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            description: {
-                type: Sequelize.TEXT
+            order_id: {
+                type: Sequelize.INTEGER
             },
-            image: {
-                type: Sequelize.STRING(500)
+            amount: {
+                type: Sequelize.INTEGER
+            },
+            payment_status: {
+                type: Sequelize.STRING
+            },
+            transation_date: {
+                type: Sequelize.DATE
+            },
+            payment_gateway_info: {
+                type: Sequelize.STRING
             },
 
             createdAt: {
@@ -26,7 +35,8 @@ module.exports = {
             }
         });
     },
+
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('courses');
+        await queryInterface.dropTable('payment_transations');
     }
 };
