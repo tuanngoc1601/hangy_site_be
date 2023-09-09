@@ -6,10 +6,6 @@ import testController from '../controllers/testController';
 let router = express.Router();
 
 let initWebRoutes = (app) => {
-
-    router.post("/api/v1/users/login", userController.handleLogin);
-    router.post("/api/v1/users/sign-up", userController.handleCreateNewUser);
-
     router.get("/api/get-all-users", userController.handleGetAllUsers);
     router.post("/api/create-new-user", userController.handleCreateNewUser);
     router.put("/api/edit-user", userController.handleEditUser);

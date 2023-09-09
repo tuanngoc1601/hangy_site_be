@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import userService from "../services/userService";
 
 let handleLogin = async (req, res) => {
@@ -11,12 +12,11 @@ let handleLogin = async (req, res) => {
         });
     }
 
-    let userData = await userService.handleUserLogin(email, password);
-    return res.status(200).json({
-        errorCode: userData.errorCode,
-        message: userData.message,
-        user: userData.data ? userData.data : {},
-    });
+    let message = await userService.handleUserLogin(email, password);
+    if(message.errorCode !== 0) {
+        return res.status(404).json(message);
+    }
+    return res.status(200).json(message);
 };
 
 let handleGetAllUsers = async (req, res) => {
@@ -40,7 +40,7 @@ let handleGetAllUsers = async (req, res) => {
 let handleCreateNewUser = async (req, res) => {
     let message = await userService.createNewUser(req.body);
     if (message.errorCode === 0) return res.status(200).json(message);
-    else return res.status(401).json(message);
+    else return res.status(404).json(message);
 };
 
 let handleEditUser = async (req, res) => {

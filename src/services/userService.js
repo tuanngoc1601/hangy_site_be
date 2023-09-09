@@ -6,50 +6,34 @@ const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let userData = {};
-            let isExist = await checkUserEmail(email);
-            if (isExist) {
-                let user = await db.User.findOne({
-                    attributes: [
-                        "id",
-                        "email",
-                        "password",
-                        "username",
-                        "firstName",
-                        "lastName",
-                        "image",
-                        "address",
-                        "phone",
-                        "gender",
-                    ],
-                    where: { email: email },
-                    raw: true,
-                });
-                if (user) {
-                    // compare password
-                    let check = await bcrypt.compareSync(
-                        password,
-                        user.password
-                    );
-                    if (check) {
-                        userData.errorCode = 0;
-                        userData.message = "Ok";
-                        delete user.password;
-                        userData.data = user;
-                    } else {
-                        userData.errorCode = 3;
-                        userData.message = "Wrong password";
-                    }
+            const user = await checkUserEmail(email);
+            if (user) {
+                // compare password
+                let checkPassword = await bcrypt.compareSync(
+                    password,
+                    user.password
+                );
+                if (checkPassword) {
+                    const { password, ...data } = user;
+                    resolve({
+                        errorCode: 0,
+                        message: "Ok",
+                        data: data
+                    });
                 } else {
-                    userData.errorCode = 2;
-                    userData.message = "User is not found";
+                    resolve({
+                        errorCode: 1,
+                        message: "Wrong password",
+                        data: {}
+                    });
                 }
             } else {
-                userData.errorCode = 1;
-                userData.message = `Your's email isn't exist in your system. Please try other email!`;
+                resolve({
+                    errorCode: 2,
+                    message: "Your's email isn't exist in your system. Please try other email!",
+                    data: {}
+                });
             }
-
-            resolve(userData);
         } catch (e) {
             reject(e);
         }
@@ -61,9 +45,10 @@ let checkUserEmail = (userEmail) => {
         try {
             let user = await db.User.findOne({
                 where: { email: userEmail },
+                raw: true
             });
             if (user) {
-                resolve(true);
+                resolve(user);
             } else {
                 resolve(false);
             }
@@ -105,8 +90,8 @@ let createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             // check user email is exist
-            let check = await checkUserEmail(data.email);
-            if (check) {
+            let user = await checkUserEmail(data.email);
+            if (user) {
                 resolve({
                     errorCode: 1,
                     message: "Email is existed in system",
