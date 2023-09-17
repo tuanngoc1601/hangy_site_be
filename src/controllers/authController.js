@@ -25,7 +25,11 @@ const authController = {
             path: "/",
             sameSite: "strict",
         });
-        return res.status(200).json({ ...message, accessToken });
+        return res.status(200).json({
+            errorCode: message.errorCode,
+            message: message.message,
+            data: { ...message.data, accessToken }
+        });
     },
 
     generateAccessToken: (message) => {
@@ -35,7 +39,7 @@ const authController = {
                 admin: message.data.is_admin,
             },
             process.env.JWT_ACCESS_KEY,
-            { expiresIn: "30s" }
+            { expiresIn: "20s" }
         );
     },
 
@@ -73,7 +77,7 @@ const authController = {
                 path: "/",
                 sameSite: "strict",
             });
-            res.status(200).json({ accessToken: newAccessToken });
+            return res.status(200).json({ accessToken: newAccessToken });
         });
     },
 
