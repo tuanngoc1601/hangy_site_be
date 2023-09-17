@@ -28,7 +28,7 @@ const authController = {
         return res.status(200).json({
             errorCode: message.errorCode,
             message: message.message,
-            data: { ...message.data, accessToken }
+            data: { ...message.data, accessToken },
         });
     },
 
@@ -51,7 +51,7 @@ const authController = {
             },
             process.env.JWT_REFRESH_KEY,
             { expiresIn: "365d" }
-        )
+        );
     },
 
     handleCreateNewUser: async (req, res) => {
@@ -62,11 +62,12 @@ const authController = {
 
     requestRefreshToken: async (req, res) => {
         const refreshToken = req.cookies.refreshToken;
-        if(!refreshToken) return res.status(401).json({
-            message: "You're not authenticated"
-        });
+        if (!refreshToken)
+            return res.status(401).json({
+                message: "You're not authenticated",
+            });
         jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
-            if(err) {
+            if (err) {
                 console.log(err);
             }
             const newAccessToken = authController.generateAccessToken(user);
@@ -84,7 +85,7 @@ const authController = {
     handleLogout: async (req, res) => {
         res.clearCookie("refreshToken");
         return res.status(200).json({ message: "Logout successfully!" });
-    }
+    },
 };
 
 module.exports = authController;

@@ -1,22 +1,16 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import viewEngine from './config/viewEngine';
-import initAuthRoutes from './route/auth';
-import initWebRoutes from './route/web';
-import connectDB from './config/connectDB';
-import cors from 'cors';
+import express from "express";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import viewEngine from "./config/viewEngine";
+import initAuthRoutes from "./route/auth";
+import initWebRoutes from "./route/web";
+import connectDB from "./config/connectDB";
+import cors from "cors";
 
-require('dotenv').config();
+require("dotenv").config();
 
 let app = express();
-// const corsOptions = {
-//     origin: '*',
-//     credentials: true,            //access-control-allow-credentials:true
-//     optionSuccessStatus: 200,
-// }
-// app.use(cors(corsOptions));
-// app.use(cors({ origin: true }));
+
 app.use(cors());
 
 // Add headers before the routes are defined

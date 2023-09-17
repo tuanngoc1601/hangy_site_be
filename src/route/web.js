@@ -1,7 +1,7 @@
-import express from 'express';
-import userController from '../controllers/userController';
-import courseController from '../controllers/courseController';
-import testController from '../controllers/testController';
+import express from "express";
+import userController from "../controllers/userController";
+import courseController from "../controllers/courseController";
+import testController from "../controllers/testController";
 
 let router = express.Router();
 
@@ -22,15 +22,36 @@ let initWebRoutes = (app) => {
     router.get("/api/get-all-question", testController.handleGetAllQuestions);
 
     router.put("/api/update-test-score", testController.handleUpdateTestScore);
-    router.post("/api/create-video-watch", courseController.handleCreateVideoWatched);
-    router.post("/api/add-result-question", testController.handleCreateResultQuestion);
-    router.get("/api/get-incorrect-question-test", testController.handleGetIncorrectQuestion);
-    router.get("/api/get-random-question", testController.handleGetRandomQuestion);
-    router.get("/api/get-all-video-watched", courseController.handleGetAllVideoWatched);
-    router.get("/api/get-result-test-preview", testController.handleGetResultTestPreview);
-    router.put("/api/update-progress-course", courseController.handleUpdateProgressCourse);
+    router.post(
+        "/api/create-video-watch",
+        courseController.handleCreateVideoWatched
+    );
+    router.post(
+        "/api/add-result-question",
+        testController.handleCreateResultQuestion
+    );
+    router.get(
+        "/api/get-incorrect-question-test",
+        testController.handleGetIncorrectQuestion
+    );
+    router.get(
+        "/api/get-random-question",
+        testController.handleGetRandomQuestion
+    );
+    router.get(
+        "/api/get-all-video-watched",
+        courseController.handleGetAllVideoWatched
+    );
+    router.get(
+        "/api/get-result-test-preview",
+        testController.handleGetResultTestPreview
+    );
+    router.put(
+        "/api/update-progress-course",
+        courseController.handleUpdateProgressCourse
+    );
 
     return app.use("/", router);
-}
+};
 
 module.exports = initWebRoutes;

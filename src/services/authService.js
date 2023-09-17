@@ -19,20 +19,21 @@ const authService = {
                         resolve({
                             errorCode: 0,
                             message: "Ok",
-                            data: data
+                            data: data,
                         });
                     } else {
                         resolve({
                             errorCode: 1,
                             message: "Wrong password",
-                            data: {}
+                            data: {},
                         });
                     }
                 } else {
                     resolve({
                         errorCode: 2,
-                        message: "Your's email isn't exist in your system. Please try other email!",
-                        data: {}
+                        message:
+                            "Your's email isn't exist in your system. Please try other email!",
+                        data: {},
                     });
                 }
             } catch (e) {
@@ -46,7 +47,7 @@ const authService = {
             try {
                 let user = await db.User.findOne({
                     where: { email: userEmail },
-                    raw: true
+                    raw: true,
                 });
                 if (user) {
                     resolve(user);
@@ -56,7 +57,7 @@ const authService = {
             } catch (e) {
                 reject(e);
             }
-        })
+        });
     },
 
     handleCreateNewUser: (data) => {
@@ -69,13 +70,12 @@ const authService = {
                         message: "Email is existed in system",
                     });
                 } else {
-                    let hashPasswordFromBcrypt = await authService.hashUserPassword(
-                        data.password
-                    );
+                    let hashPasswordFromBcrypt =
+                        await authService.hashUserPassword(data.password);
                     await db.User.create({
                         ...data,
                         password: hashPasswordFromBcrypt,
-                        is_admin: false
+                        is_admin: false,
                     });
                     resolve({
                         errorCode: 0,
@@ -97,7 +97,7 @@ const authService = {
                 reject(e);
             }
         });
-    }
-}
+    },
+};
 
 module.exports = authService;
