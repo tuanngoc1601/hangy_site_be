@@ -17,37 +17,39 @@ const authController = {
         if (message.errorCode !== 0) {
             return res.status(404).json(message);
         }
-        const accessToken = authController.generateAccessToken(message);
-        const refreshToken = authController.generateRefreshToken(message);
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: false,
-            path: "/",
-            sameSite: "strict",
-        });
-        return res.status(200).json({
-            errorCode: message.errorCode,
-            message: message.message,
-            data: { ...message.data, accessToken },
-        });
+        const accessToken = authController.generateAccessToken(message.data);
+        const refreshToken = authController.generateRefreshToken(message.data);
+        return res
+            .cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: false,
+                path: "/",
+                sameSite: "strict",
+            })
+            .status(200)
+            .json({
+                errorCode: message.errorCode,
+                message: message.message,
+                data: { ...message.data, accessToken },
+            });
     },
 
-    generateAccessToken: (message) => {
+    generateAccessToken: (data) => {
         return jwt.sign(
             {
-                id: message.data.id,
-                admin: message.data.is_admin,
+                id: data.id,
+                admin: data.is_admin,
             },
             process.env.JWT_ACCESS_KEY,
             { expiresIn: "20s" }
         );
     },
 
-    generateRefreshToken: (message) => {
+    generateRefreshToken: (data) => {
         return jwt.sign(
             {
-                id: message.data.id,
-                admin: message.data.is_admin,
+                id: data.id,
+                admin: data.is_admin,
             },
             process.env.JWT_REFRESH_KEY,
             { expiresIn: "365d" }
@@ -62,22 +64,18 @@ const authController = {
 
     requestRefreshToken: async (req, res) => {
         const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken)
+        if (!refreshToken) {
             return res.status(401).json({
                 message: "You're not authenticated",
             });
+        }
         jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
             if (err) {
-                console.log(err);
+                return res.status(401).json({
+                    message: "Refresh token is not valid",
+                });
             }
             const newAccessToken = authController.generateAccessToken(user);
-            const newRefreshToken = authController.generateRefreshToken(user);
-            res.cookie("refreshToken", newRefreshToken, {
-                httpOnly: true,
-                secure: false,
-                path: "/",
-                sameSite: "strict",
-            });
             return res.status(200).json({ accessToken: newAccessToken });
         });
     },
