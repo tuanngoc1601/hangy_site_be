@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import viewEngine from "./config/viewEngine";
 import initAuthRoutes from "./route/auth";
+import initProductRouters from "./route/productRoutes";
 import initWebRoutes from "./route/web";
 import connectDB from "./config/connectDB";
 import cors from "cors";
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 viewEngine(app);
 initAuthRoutes(app);
+initProductRouters(app);
 initWebRoutes(app);
 
 connectDB();
